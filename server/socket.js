@@ -31,6 +31,9 @@ export const socketHandler = (io)=>{
             io.to(receiver).emit("receivemessage",msg)
             io.to(socket.userId).emit("receivemessage",msg)
         })
+        socket.on("typing",({receiver})=>{
+            socket.to(receiver).emit("typing",{sender:socket.userId})
+        })  
     })
 
 }
