@@ -1,9 +1,32 @@
-import React from 'react'
+import React from "react";
+import Chat from "./pages/Chat.jsx";
+import Login from "./pages/Login.jsx";
+import { useAuth } from "./auth/UseAuth.jsx";
+import { Navigate, Route, Routes } from "react-router-dom";
+import Register from "./pages/Register.jsx";
 
 const App = () => {
-  return (
-    <div >App</div>
-  )
-}
+  const { user, loading } = useAuth();
 
-export default App
+  if (loading) return <h1>Loading...</h1>;
+  return (
+    <>
+      <Routes>
+        {!user ? (
+          <>
+            <Route path="/" element={<Login />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </>
+        ) : (
+          <>
+            <Route path="/chat" element={<Chat />} />
+            <Route path="*" element={<Navigate to='/chat'/>} />
+          </>
+        )}
+        <Route path='/register' element={<Register/>}/>
+      </Routes>
+    </>
+  );
+};
+
+export default App;

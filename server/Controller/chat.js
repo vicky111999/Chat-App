@@ -1,45 +1,33 @@
-import chat from '../models/Message.js'
-import User from '../models/User.js'
+import chat from "../models/Message.js";
+import User from "../models/User.js";
 
-export const Allchats = async(req,res)=>{
+export const Allchats = async (req, res) => {
+  const  userId  = req.params.id
 
-    const {userId} = req.params
-    const message = await chat.find({
-        $or:[
-            {
-                sender:req.userId,
-                receiver:userId
-            },
-            {
-                sender:userId,
-                receiver:req.userId
-            }
-        ]
-    }).sort({createdAt: 1 })
-   return res.json(message)
-}
-
-export const sendmsg=async(req,res)=>{
-
-    const {userId} = req.params
-    const {text} = req.body
-
-    const message = new chat({
-        sender:req.userId,
-        receiver:userId,
-        text
+  const message = await chat
+    .find({
+      $or: [
+        {
+          sender: req.userId,
+          receiver: userId,
+        },
+        {
+          sender: userId,
+          receiver: req.userId,
+        },
+      ],
     })
-    await message.save()
-   return  res.json(message)
-}
+    .sort({ createdAt: 1 });
+  return res.json(message);
+};
 
-export const list =async(req,res)=>{
-try{
-    const users= await User.find({_id:{$ne:req.userId}}).select("_id name")
-
-    return res.status(200).json({message:users})
-}
-catch(err){
-    return res.status(401).json({message:err.message})
-}
-}
+export const list = async (req, res) => {
+  try {
+    const users = await User.find({ _id: { $ne: req.userId } }).select(
+      "_id name"
+    );
+    return res.status(200).json({ message: users });
+  } catch (err) {
+    return res.status(401).json({ message: err.message });
+  }
+};
