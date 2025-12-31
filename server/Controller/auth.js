@@ -46,8 +46,8 @@ export const login = async (req, res) => {
     });
     res.cookie("refreshToken", RefreshToken, {
       httpOnly: true,
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-      secure: process.env.NODE_ENV === "production"
+      sameSite: true,
+      secure: true,
     });
 
     res.json({ success: true, message: "loggedin" });
@@ -60,8 +60,8 @@ export const refresh = (req, res) => {
   const accessToken = createAccesstoken(req.userId);
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-    secure: process.env.NODE_ENV === "production"
+    sameSite: true,
+    secure: true,
   });
   res.json({ accessToken });
 };
