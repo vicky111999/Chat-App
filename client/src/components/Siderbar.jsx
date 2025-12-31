@@ -24,7 +24,7 @@ const Siderbar = ({ users=[] , activeUser, onSelect }) => {
         </div>
       ))}
       <button
-        className="bg-red-500 text-white px-4 rounded-lg"
+         className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded-lg"
         onClick={()=>logout()}
       >
         Logout
