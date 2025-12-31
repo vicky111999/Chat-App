@@ -42,13 +42,13 @@ export const login = async (req, res) => {
 
     res.cookie("accessToken", AccessToken, {
       httpOnly: true,
-      samSite: true,
-      secure: true
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
     });
     res.cookie("refreshToken", RefreshToken, {
       httpOnly: true,
-      sameSite: true,
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
     });
 
     res.json({ success: true, message: "loggedin" });
@@ -61,22 +61,20 @@ export const refresh = (req, res) => {
   const accessToken = createAccesstoken(req.userId);
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
-    sameSite: true,
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
   });
   res.json({ accessToken });
 };
 
 export const logout = async (req, res) => {
- 
   res.clearCookie("accessToken");
   res.clearCookie("refreshToken");
   return res.json("Logged Out");
 };
 
 export const me = async (req, res) => {
- 
   const user = await User.findById(req.userId).select("-password");
-  
+
   return res.status(200).json(user);
 };
