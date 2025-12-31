@@ -47,6 +47,7 @@ export const login = async (req, res) => {
     res.cookie("refreshToken", RefreshToken, {
       httpOnly: true,
       sameSite: "strict",
+      secure: process.env.NODE_ENV === "production"
     });
 
     res.json({ success: true, message: "loggedin" });
@@ -60,6 +61,7 @@ export const refresh = (req, res) => {
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
     sameSite: "strict",
+    secure: process.env.NODE_ENV === "production"
   });
   res.json({ accessToken });
 };
