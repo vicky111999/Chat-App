@@ -42,7 +42,8 @@ export const login = async (req, res) => {
 
     res.cookie("accessToken", AccessToken, {
       httpOnly: true,
-      samSite: "strict",
+      samSite: true,
+      secure: true
     });
     res.cookie("refreshToken", RefreshToken, {
       httpOnly: true,
