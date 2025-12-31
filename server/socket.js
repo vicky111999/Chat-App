@@ -18,7 +18,7 @@ export const socketHandler = (io) => {
 
   io.on("connection", (socket) => {
     socket.join(socket.userId);
-    socket.on("privatemessage", async ({ receiver, text }) => {
+    socket.on("privatemessage", async ({ receiver, text}) => {
       const msg = new chat({
         sender: socket.userId,
         receiver,

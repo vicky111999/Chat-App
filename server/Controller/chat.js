@@ -18,6 +18,9 @@ export const Allchats = async (req, res) => {
       ],
     })
     .sort({ createdAt: 1 });
+
+    console.log(message)
+    
   return res.json(message);
 };
 

@@ -4,7 +4,7 @@ import { VerifyAuthToken } from "../middleware/auth.js";
 
 const route = express.Router();
 
-route.get("/chat/:id", Allchats);
+route.get("/chat/:id",VerifyAuthToken, Allchats);
 route.get("/list",VerifyAuthToken, list);
 
 export default route;

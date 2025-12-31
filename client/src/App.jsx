@@ -12,18 +12,10 @@ const App = () => {
   return (
     <>
       <Routes>
-        {!user ? (
-          <>
-            <Route path="/" element={<Login />} />
-            <Route path="*" element={<Navigate to="/" />} />
-          </>
-        ) : (
-          <>
-            <Route path="/chat" element={<Chat />} />
-            <Route path="*" element={<Navigate to='/chat'/>} />
-          </>
-        )}
-        <Route path='/register' element={<Register/>}/>
+            <Route path="/" element={!user ?<Login /> : <Navigate to="/chat" replace/>} />
+            <Route path="/chat" element={user ? <Chat /> : <Navigate to='/' replace/>} />
+            <Route path='/register' element={<Register/>} />
+            <Route path="*" element={<Navigate to='/' replace />}/>
       </Routes>
     </>
   );

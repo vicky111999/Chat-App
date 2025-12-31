@@ -4,28 +4,31 @@ import socket from "../socket/Socket";
 import Chatlayout from "../components/Chatlayout";
 import Chatwindow from "../components/Chatwindow";
 import Siderbar from "../components/Siderbar";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../auth/UseAuth";
 
 const Chat = () => {
   const [users, setUsers] = useState([]);
   const [selectuser, setSelectuser] = useState(null);
   const [messages, setmessages] = useState([]);
   
-  const navigate = useNavigate()
+  
+  const {user} = useAuth()
   
 
   useEffect(() => {
+    if (!user) return <Navigate to="/" replace/>;
     api
       .get(`/api/auth/list`)
       .then((res) => setUsers(res.data.message))
       .catch((err) => {
         console.log(err.message);
       });
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (!selectuser) return;
-    console.log(selectuser._id);
+    console.log(selectuser)
     api
       .get(`/api/auth/chat/${selectuser._id}`)
       .then((res) => setmessages(res.data))
@@ -33,6 +36,7 @@ const Chat = () => {
         console.log(err.message);
       });
   }, [selectuser]);
+
 
   useEffect(() => {
     socket.connect();
@@ -52,10 +56,12 @@ const Chat = () => {
     socket.on("receivemessage", (msg) => {
       if (selectuser && msg.sender === selectuser._id) {
         setmessages((prev) => [...prev, msg]);
+      
       }
     });
     return () => socket.off("receivemessage");
   }, [selectuser]);
+  console.log(messages)
 
   const sendMessage = async (text) => {
     if (!text || !selectuser) return;
@@ -63,16 +69,7 @@ const Chat = () => {
     socket.emit("privatemessage", { receiver: selectuser._id, text });
     setmessages((prev) => [...prev, { text, fromMe: true }]);
   };
-
-  const logout = async () => {
-    console.log("button clicked")
-    await api
-      .post("api/auth/logout")
-      .then((res) => res.data)
-      .catch((err) => console.log(err.message));
-
-      navigate('/')
-  };
+  
   return (
     <>
       {" "}
@@ -83,7 +80,7 @@ const Chat = () => {
             users={users}
             activeUser={selectuser}
             onSelect={setSelectuser}
-            onLogout={logout}
+          
           />
         }
         main={

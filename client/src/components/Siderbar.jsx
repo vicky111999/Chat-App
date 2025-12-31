@@ -1,6 +1,8 @@
 import React from "react";
+import { useAuth } from "../auth/UseAuth";
 
-const Siderbar = ({ users=[] , activeUser, onSelect, onLogout }) => {
+const Siderbar = ({ users=[] , activeUser, onSelect }) => {
+  const {logout} = useAuth()
   return (
     <div className="h-full overflow-auto">
       <div className="p-4 font-semibold text-lg border-b">Chats</div>
@@ -23,7 +25,7 @@ const Siderbar = ({ users=[] , activeUser, onSelect, onLogout }) => {
       ))}
       <button
         className="bg-red-500 text-white px-4 rounded-lg"
-        onClick={()=>onLogout()}
+        onClick={()=>logout()}
       >
         Logout
       </button>
